@@ -7,44 +7,55 @@ loot.geometry('400x500+600+300')
 
 
 s = Label(loot, text = 'Базовая валюта')
-s.pack(side='top', pady=10)
+s.pack(side='top', pady=20)
 
 frame = Frame(loot)
-frame.pack(pady=10)
+frame.pack()
 
-window = Entry(frame, width=20,font=('Arial',12))
+window = Entry(frame,width=20)
 window.grid()
+
+combo = ttk.Combobox(window)
+combo.pack()
+combo.set("EUR")
 
 s1 = Label(loot, text = 'Евро')
 s1.pack(side='top', pady=10)
 
 s2 = Label(loot, text = 'Вторая базовая валюта')
-s2.pack(side='top', pady=10)
+s2.pack(side='top', pady=30)
 
 frame1 = Frame(loot)
-frame1.pack(pady=10)
+frame1.pack()
 
-window1 = Entry(frame1, width=20,font=('Arial',12))
+window1 = Entry(frame1, width=20)
 window1.grid()
+
+combo = ttk.Combobox(window1)
+combo.pack()
+combo.set("USD")
 
 s3 = Label(loot, text = 'Американский доллар')
 s3.pack(side='top', pady=10)
 
 s4 = Label(loot, text = 'Целевая валюта')
-s4.pack(side='top', pady=10)
+s4.pack(side='top', pady=30)
 
 frame2 = Frame(loot)
-frame2.pack(pady=30)
+frame2.pack()
 
-
-window2 = Entry(frame2, width=20,font=('Arial',12))
+window2 = Entry(frame2, width=20)
 window2.grid()
+
+combo = ttk.Combobox(window2)
+combo.pack()
+combo.set("RUB")
 
 s4 = Label(loot, text = 'Российский рубль')
 s4.pack(side='top', pady=10)
 
 add = Button(loot)
-add.config(width=20, text='Получить курс обмена', justify='center',font=('Arial',10))
-add.pack()
+add.config(width=20, text='Получить курс обмена', justify='center')
+add.pack(pady=30)
 
 loot.mainloop()
