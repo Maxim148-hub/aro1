@@ -1,10 +1,14 @@
 from tkinter import *
 from tkinter import ttk
 
+
+def exchange():
+    pass
+
+
 loot = Tk()
 loot.title("Курсы обмена валют")
 loot.geometry('400x500+600+300')
-
 
 s = Label(loot, text = 'Базовая валюта')
 s.pack(side='top', pady=20)
