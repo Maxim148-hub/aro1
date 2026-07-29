@@ -24,7 +24,6 @@ def exchange():
 
             mb.showinfo('Курсы валют:', f'{eur}\n{usd}')
 
-
     except requests.exceptions.RequestException as e:
         mb.showerror(f"Ошибка при запросе к API: {e}")
     except ValueError as e:
