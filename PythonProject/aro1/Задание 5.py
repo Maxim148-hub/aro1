@@ -1,9 +1,34 @@
 from tkinter import *
 from tkinter import ttk
+import requests
+from tkinter import messagebox as mb
 
 
 def exchange():
-    pass
+    url = "https://api.exchangerate-api.com/v4/latest/RUB"
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+        rates = data.get('rates',{})
+
+        usd_rate = rates.get('USD')
+        eur_rate = rates.get('EUR')
+        rub_rate = rates.get('RUB')
+
+        if usd_rate and eur_rate:
+
+            eur = f"1 EUR = {(rub_rate / eur_rate):.2f} RUB"
+            usd = f"1 USD = {(rub_rate / usd_rate):.2f} RUB"
+
+            mb.showinfo('Курсы валют:', f'{eur}\n{usd}')
+
+
+    except requests.exceptions.RequestException as e:
+        mb.showerror(f"Ошибка при запросе к API: {e}")
+    except ValueError as e:
+        mb.showerror(f"Ошибка обработки данных: {e}")
 
 
 loot = Tk()
@@ -58,7 +83,7 @@ combo.set("RUB")
 s4 = Label(loot, text = 'Российский рубль')
 s4.pack(side='top', pady=10)
 
-add = Button(loot)
+add = Button(loot,command=exchange)
 add.config(width=20, text='Получить курс обмена', justify='center')
 add.pack(pady=30)
 
