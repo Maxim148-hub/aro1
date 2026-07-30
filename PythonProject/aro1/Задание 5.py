@@ -4,86 +4,35 @@ import requests
 from tkinter import messagebox as mb
 
 
-def exchange():
-    url = "https://api.exchangerate-api.com/v4/latest/RUB"
 
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        rates = data.get('rates',{})
+window = Tk()
+window.title("Курс обмена валюты")
+window.geometry('400x600+600+300')
 
-        usd_rate = rates.get('USD')
-        eur_rate = rates.get('EUR')
-        rub_rate = rates.get('RUB')
+Label(text="Первая базовая валюта:").pack(padx=10, pady=5)
+base_combobox = ttk.Combobox(values=list()))
+base_combobox.pack(padx=10, pady=5)
+base_combobox.bind("<<ComboboxSelected>>", )
 
-        if usd_rate and eur_rate:
+b_label = ttk.Label()
+b_label.pack(padx=10, pady=10)
 
-            eur = f"1 EUR = {(rub_rate / eur_rate):.2f} RUB"
-            usd = f"1 USD = {(rub_rate / usd_rate):.2f} RUB"
+Label(text="Вторая базовая валюта:").pack(padx=10, pady=5)
+base2_combobox = ttk.Combobox(values=list())
+base2_combobox.pack(padx=10, pady=5)
+base2_combobox.bind("<<ComboboxSelected>>", )
 
-            mb.showinfo('Курсы валют:', f'{eur}\n{usd}')
+b2_label = ttk.Label()
+b2_label.pack(padx=10, pady=10)
 
-    except requests.exceptions.RequestException as e:
-        mb.showerror(f"Ошибка при запросе к API: {e}")
-    except ValueError as e:
-        mb.showerror(f"Ошибка обработки данных: {e}")
+Label(text="Целевая валюта:").pack(padx=10, pady=5)
+target_combobox = ttk.Combobox(values=list())
+target_combobox.pack(padx=10, pady=5)
+target_combobox.bind("<<ComboboxSelected>>", )
 
+t_label = ttk.Label()
+t_label.pack(padx=10, pady=10)
 
-loot = Tk()
-loot.title("Курсы обмена валют")
-loot.geometry('400x500+600+300')
+Button(text="Сравнить курсы обмена", ).pack(padx=10, pady=10)
 
-s = Label(loot, text = 'Базовая валюта')
-s.pack(side='top', pady=20)
-
-frame = Frame(loot)
-frame.pack()
-
-window = Entry(frame,width=20)
-window.grid()
-
-combo = ttk.Combobox(window)
-combo.pack()
-combo.set("EUR")
-
-s1 = Label(loot, text = 'Евро')
-s1.pack(side='top', pady=10)
-
-s2 = Label(loot, text = 'Вторая базовая валюта')
-s2.pack(side='top', pady=30)
-
-frame1 = Frame(loot)
-frame1.pack()
-
-window1 = Entry(frame1, width=20)
-window1.grid()
-
-combo = ttk.Combobox(window1)
-combo.pack()
-combo.set("USD")
-
-s3 = Label(loot, text = 'Американский доллар')
-s3.pack(side='top', pady=10)
-
-s4 = Label(loot, text = 'Целевая валюта')
-s4.pack(side='top', pady=30)
-
-frame2 = Frame(loot)
-frame2.pack()
-
-window2 = Entry(frame2, width=20)
-window2.grid()
-
-combo = ttk.Combobox(window2)
-combo.pack()
-combo.set("RUB")
-
-s4 = Label(loot, text = 'Российский рубль')
-s4.pack(side='top', pady=10)
-
-add = Button(loot,command=exchange)
-add.config(width=20, text='Получить курс обмена', justify='center')
-add.pack(pady=30)
-
-loot.mainloop()
+window.mainloop()
