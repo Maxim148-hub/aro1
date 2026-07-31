@@ -15,50 +15,53 @@ def exchange():
     base_code = base_combobox.get()
 
     if not base_code:
-        mb.showwarning("Ошибка", "Выберите криптовалюту")
+        mb.showwarning("Внимание", "Выберите криптовалюту")
         return
 
     try:
-        # Получаем курс криптовалюты
+        if base_code not in coin_ids:
+            mb.showerror("Ошибка", f"Криптовалюта {base_code} не поддерживается")
+            return
+
         coin_id = coin_ids[base_code]
-        response = requests.get(
-            f'https://api.coingecko.com/api/v3/simple/price?ids={coin_id}&vs_currencies=usd')
+        url = f'https://api.coingecko.com/api/v3/simple/price?ids={coin_id}&vs_currencies=usd'
+
+        response = requests.get(url)
         response.raise_for_status()
         data = response.json()
 
-        base = coin_id[base_code]
-        if base_code in data['coin_id']:
-            exchange_rate1 = data['coin_id']['usd']
-            base = coin_id[base_code]
+        if coin_id in data and 'usd' in data[coin_id]:
+            exchange_rate = data[coin_id]['usd']
+            base_name = coin_ids[base_code]
 
-            # Сравнение курсов
             mb.showinfo("Курс обмена",
-                        f"1 {base} = {exchange_rate1:.2f},{base},USD")
-
+                        f"1 {base_name} = {exchange_rate:.2f} USD")
         else:
-            mb.showerror("Ошибка", f"Валюта {base} не найдена")
+            mb.showerror("Ошибка", f"Не удалось получить курс для {base_code}")
 
+    except requests.exceptions.RequestException as e:
+        mb.showerror("Ошибка соединения", f"Не удалось подключиться к API: {e}")
     except Exception as e:
-        mb.showerror("Ошибка", f"Ошибка: {e}")
+        mb.showerror("Ошибка", f"Произошла ошибка: {e}")
 
 
 # Словарь кодов популярных криптовалют и их названий
-coin_ids  = {
-    "BTC" :  "Bitcoin",
-    "ETH" :  "Ethereum",
-    "USDT":  "Tether",
-    "BNB" :  "BNB",
-    "XRP" :  "XRP",
-    "USDC":  "USD Coin",
-    "SOL" :  "Solana",
-    "TRX" :  "TRON",
-    "DOGE":  "Dogecoin",
-    "ADA" :  "Cardano",
-    "STETH": "Lido Staked Ether",
-    "BCH" :  "Bitcoin Cash",
-    "LINK":  "Chainlink",
-    "SUI" :  "Sui",
-    "HYPE":  "Hyperliquid"
+coin_ids = {
+    "BTC": "bitcoin",
+    "ETH": "ethereum",
+    "USDT": "tether",
+    "BNB": "binancecoin",
+    "XRP": "ripple",
+    "USDC": "usd-coin",
+    "SOL": "solana",
+    "TRX": "tron",
+    "DOGE": "dogecoin",
+    "ADA": "cardano",
+    "STETH": "staked-ether",
+    "BCH": "bitcoin-cash",
+    "LINK": "chainlink",
+    "SUI": "sui",
+    "HYPE": "hyperliquid"
 }
 
 window = Tk()
@@ -78,12 +81,7 @@ b_label.pack(padx=10, pady=10)
 Label(text="Американский доллар:").pack(padx=10, pady=5)
 Label(text="USD").pack(padx=10, pady=5)
 
-
 # Кнопка для получения курса
 Button(text="Текущий курс обмена", command=exchange).pack(padx=10, pady=20)
 
-
-
-
 window.mainloop()
-
